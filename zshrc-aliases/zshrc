@@ -1,0 +1,43 @@
+alias aliaswip='/Users/$(whoami)/Library/Android/sdk/emulator/emulator -avd android14 -no-snapshot-load'
+alias logcat='adb logcat -s okhttp.OkHttpClient -v raw'
+
+# Alias definitions for K8
+alias ksn='kubectl config set-context --current --namespace'
+alias kgn='kubectl get namespaces'
+alias kgp='kubectl get pods'
+alias kgl1='function f() {if [ -n "$2" ]; then kubectl logs --since=$2 $1 else kubectl logs $1; fi}; f'
+alias kgl='kubectl logs $@'
+# function _kgl() { if [ -n "$2" ]; then kubectl logs --since="$2" "${@:1}"; else kubectl logs "${@:1}"; fi }; _kgl'
+alias kgfl='kubectl logs -f $@'
+alias kgfla='kubectl logs -l app=$1'
+
+# Alias definitions for gradlew commands
+GRADLE='./gradlew --no-daemon'
+alias gcb-t="$GRADLE clean build -x test"
+alias gt="$GRADLE test --stacktrace"
+alias gtv="$GRADLE test jacocoTestCoverageVerification --stacktrace"
+alias gd="$GRADLE detekt"
+alias gcb="$GRADLE clean build"
+
+# Javas alias using SDKMAN
+alias javas='sdk list java'
+alias java11='sdk use java 11.0.14.1-jbr'
+
+
+function kubectx_prompt() {
+    local ref_ctx="$(kubectl config current-context 2> /dev/null)"
+    local ref_ns="$(kubectl config view --minify --output 'jsonpath={..namespace}' 2> /dev/null)"
+
+    echo "[${ref_ctx}:${ref_ns}]"
+}
+
+setopt PROMPT_SUBST
+export PROMPT='%m%f $(kubectx_prompt) ~ '
+
+
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="$HOME/.sdkman"
+[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+
+# Generated for envman. Do not edit.
+[ -s "$HOME/.config/envman/load.sh" ] && source "$HOME/.config/envman/load.sh"
